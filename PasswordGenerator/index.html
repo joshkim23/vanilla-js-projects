@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Password Generator</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <div class = main-container>
+            <h2 class = "title">Password Generator</h2>
+
+            <div class = "generated-password">
+                <input type = "text" class = "password" id = "password" placeholder = "Your new password will appear here">
+            </div>
+
+            <div class = "password-length"> Password Length: 
+                <input type = "text" class = "input-number" placeholder="0"> 
+                <span>characters</span>
+            </div>
+
+            <div class = "checklist">
+                <div class = "checklist-item">
+                    <input type = "checkbox" class = "checkbox" id = "upper">
+                    <span>Include upper case letters (eg ABCDE)</span>
+                    <br>
+                </div>
+                
+                <div class = "checklist-item">
+                    <input type = "checkbox" class = "checkbox" id = "lower">
+                    <span>Include lower case letters (eg abcde)</span>
+                    <br>
+                </div>
+                
+                <div class = "checklist-item">
+                    <input type = "checkbox" class = "checkbox" id = "nums">
+                    <span>Include numbers (eg 123456)</span>
+                    <br>
+                </div>
+                
+                <div class = "checklist-item">
+                    <input type = "checkbox" class = "checkbox" id = "symbols">
+                    <span>Include symbols (eg ~!@#$%^&*)</span>
+                    <br>
+                </div>
+            </div>
+
+            <div class = "generate-button">
+                <button class = "generate">Generate your password</button>
+            </div>
+
+
+
+        </div>
+    </body>
+</html>

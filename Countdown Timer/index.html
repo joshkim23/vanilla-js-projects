@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<!-- First step is thinking of what you want to build and what you want it to do. Then for inspiration look at templates of what people have already built and try to recreate it somehow using html and basic css. Then go to JS and update functionality. Study this to see how the elments are all broken up for styling and also to be used in JS! the id's used as constants in js that can be updated using .innerHTML -->
+
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Countdown Timer</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" defer></script>
+    </head>
+
+    <body>
+        <h1>Countdown to 2021</h1>
+
+        <!-- break every component into containers -->
+        <!-- make id's for elements that are going to dynamically update through DOM manipulation from js! these id's are grabbed by js and converted to constants to be used in calculations. Then js will dynamically update the element text -->
+        <!-- put 0 as a placeholder for the numbers, so that you can format the text on the page. but once it's running you don't need the 0's -->
+        
+        <div class = "countdown-container">
+            <div class="countdown-element">
+                <p class="big-text" id = "days">0</p> 
+                <span>days</span>
+            </div>
+
+            <div class="countdown-element">
+                <p class="big-text" id = "hours">0</p>
+                <span>hours</span>
+            </div>
+
+            <div class="countdown-element">
+                <p class="big-text" id = "minutes">0</p>
+                <span>min</span>
+            </div>
+
+            <div class="countdown-element">
+                <p class="big-text" id = "seconds">0</p>
+                <span>seconds</span>
+            </div>
+        </div>
+
+    </body>
+
+</html>

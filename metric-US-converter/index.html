@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Metric to US Standard Converter</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" defer></script>
+        <link rel="icon" href="./otto.jpg"/>
+    </head>
+    <body>
+        <div class = "mainBox">
+            <h3 class = "header">Specify your conversion</h3>
+
+            <div class = "selections">
+                <input class = "metric-selector" type="radio" id="metric" name="standardSelection" value = "metric" checked>
+                <label for="metric">Metric</label>
+
+                <input class = "US-selector" type="radio" id="US Standard" name="standardSelection" value="US">
+                <label for="US Standard">US</label>
+
+                <input type="text" placeholder="value" class="input-value" style="margin: 10px"/>
+
+                <select name="unit-selector" class ="input-unit-dropdown"></select>
+
+                <span style="padding: 5px"> to </span>
+
+                <select name="output-unit-dropdown" class="output-unit-dropdown"></select>
+
+            </div>
+
+            <br/>
+            <div class = "output">
+                <span> = </span>
+                <span class="converted-value"  style="width: 50px">_.____</span>
+                <span class="output-units"></span>
+            </div>
+
+        </div>
+
+        
+    </body>
+</html>

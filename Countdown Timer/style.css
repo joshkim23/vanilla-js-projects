@@ -1,0 +1,50 @@
+  
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    background-image: url(sky.jpg);
+    background-size: cover;
+    background-position: center center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    justify-content: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: normal;
+    margin-top: -5rem;
+}
+
+.countdown-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* this is the number container */
+.big-text {
+    font-weight: bold;
+    font-size: 6rem;
+    line-height: 5rem;
+    margin: 0 2rem 1rem;
+}
+
+.countdown-element {
+    text-align: center;
+}
+
+/* targets span element for days hours min seconds */
+.countdown-element span {
+    font-size: 1.5rem;
+}

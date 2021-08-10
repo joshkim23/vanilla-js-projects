@@ -1,0 +1,120 @@
+  
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background-image: url(groceries.jpg);
+    background-size: cover;
+    color: #f5f5f5;
+}
+
+.mainBox {
+    color: black;
+    width: 70%;
+    height: 600px;
+    background-color: #fff;
+    opacity: 0.9;
+    border-radius: 15px;
+    text-align: center;
+
+}
+
+.header {
+    /* background-color: green; */
+    padding: 0;
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+h5 {
+    /* background-color: blue; */
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
+}
+
+ul {
+    text-align: left;
+    list-style: none;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+li {
+    width: 100%;
+    /* background-color: yellow; */
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+span.item-name {
+    width: 77%;
+    display: inline-block; /*NEED THIS TO MAKE AN ELEMENT OF FIXED SIZE!!!!! */
+    text-align: left;
+    /* background-color: gray; */
+}
+
+.quantity-and-cost {
+    float: right;
+    position: relative;
+    /* background-color: blue; */
+}
+
+
+.quantity-box {
+    margin-right: 20px;
+    position: absolute;
+    padding: 0;
+}
+
+.cost-per-item {
+    padding-left: 10px;
+    float: right;
+}
+
+input {
+    width: 30px;
+    text-align: center;
+
+}
+
+button {
+    border: none;
+    background-color: white;
+    font-size: 16px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.totals-box {
+    background-color: lightsteelblue;
+    border-radius: 10px;
+    text-align: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+
+.subtotal {
+    float: right;
+}
+

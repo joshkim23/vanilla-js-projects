@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "Countdown Timer"
+		},
+		{
+			"path": "Base Project"
+		},
+		{
+			"path": "Quiz App"
+		},
+		{
+			"path": "ToDoList"
+		},
+		{
+			"path": "Shopping Cart"
+		},
+		{
+			"path": "WeatherApp"
+		},
+		{
+			"path": "PokeDex"
+		},
+		{
+			"path": "Movie App"
+		},
+		{
+			"path": "IphoneCalculator"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "ToDoList"
+	}
+}

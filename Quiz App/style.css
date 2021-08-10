@@ -1,0 +1,70 @@
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #b8c6db;
+    background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    /* you need this min-height AND justify content together for the box to be fully centered */
+}
+
+.quiz-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    justify-content: center;
+    overflow: hidden;
+    /* gets rid of corners of the button block element*/
+}
+
+ul {
+    padding: 20px;
+}
+
+ul li {
+    text-decoration: none;
+    list-style: none;
+    text-align: left;
+    padding: 0;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+}
+
+ul li:hover {
+    opacity: 0.7;
+}
+
+button {
+    background-color: #3498db;
+    border: none;
+    width: 100%;
+    display: block;
+    font-family: inherit;
+    padding: 1rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+    background-color: #399adb;
+    color: white;
+}
+
+
+input,label:hover {
+    cursor: pointer; 
+}
+
