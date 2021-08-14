@@ -1,3 +1,8 @@
+    // selecting the conversion type (length, weight, temp)
+    const lengthSelectorEl = document.querySelector('.length');
+    const weightSelectorEl = document.querySelector('.weight');
+    const tempSelectorEl = document.querySelector('.temp');
+    
     // need to populate selections based on metric/us selection, and then populate the output units based on the selection from the dropdown
     // selecting input units standard
     const metricSelectorEl = document.querySelector('.metric-selector');
@@ -16,67 +21,102 @@
 
     // standards for the app
     const units = {
-        metric: ['mm', 'cm', 'm', 'km'],
-        US: ['in', 'ft', 'yd', 'mi']
+        metric: {
+            length: ['mm', 'cm', 'm', 'km'],
+            weight: ['mg', 'g', 'kg'],
+            temperature: ['C']
+        },
+        US: {
+            length: ['in', 'ft', 'yd', 'mi'],
+            weight: ['oz','lb', 'ton'],
+            temperature: ['F']
+        }
     }
 
     // states for the app that are used to calculate the output - initialized for start of app to be in metric
-    let inputStandard = "metric"
+    let conversionType = "length";
+    let inputStandard = "metric";
     let outputStandard = "US";
     let inputValue;
-    let inputUnits = "mm";
-    let outputUnits = "in";
+    let inputUnits = `${units[inputStandard][conversionType][0]}`; // mm
+    let outputUnits = `${units[outputStandard][conversionType][0]}`; // in
 
     // start the app with initial selections
     function start() {
         generateDropdown('metric', 'US');
+        outputUnitEl.innerHTML = outputUnits;
+        console.log(outputUnits);
     }
     start();
 
-    // generate drop down unit options depending on the selected standard
+    // generate drop down unit options depending on the selected conversion type and standard
     function generateDropdown(standard, opposite) {
         inputUnitDropdownEl.innerHTML = '';
         // generate input units based on input standard
-        for (let i=0; i<units[standard].length; i++) {
+        for (let i=0; i<units[standard][conversionType].length; i++) {
             let optionEl = document.createElement('option');
-            optionEl.innerHTML = units[standard][i];
+            optionEl.innerHTML = units[standard][conversionType][i];
             inputUnitDropdownEl.appendChild(optionEl); 
         }
 
         outputUnitDropdownEl.innerHTML = '';
         // generate output units based on input standard
-        for (let i=0; i<units[opposite].length; i++) {
+        for (let i=0; i<units[opposite][conversionType].length; i++) {
             let optionEl = document.createElement('option');
-            optionEl.innerHTML = units[opposite][i];
+            optionEl.innerHTML = units[opposite][conversionType][i];
             outputUnitDropdownEl.appendChild(optionEl); 
             if (i===0) {
-                outputUnitEl.innerHTML = units[opposite][0];
+                outputUnitEl.innerHTML = units[opposite][conversionType][0]; // populate the output units 
             }
         }
     }
+
+    // event listeners for the conversion type (length, weight, temp)
+    lengthSelectorEl.addEventListener('click', () => {
+        conversionType = "length";
+        generateDropdown(inputStandard, outputStandard);
+        inputUnits = `${units[inputStandard][conversionType][0]}`;
+        outputUnits = `${units[outputStandard][conversionType][0]}`;
+        calculate();
+    });
+    weightSelectorEl.addEventListener('click', () => {
+        conversionType = "weight";
+        generateDropdown(inputStandard, outputStandard);
+        inputUnits = `${units[inputStandard][conversionType][0]}`;
+        outputUnits = `${units[outputStandard][conversionType][0]}`;
+        calculate();
+    });
+    tempSelectorEl.addEventListener('click', () => {
+        conversionType = "temperature";
+        generateDropdown(inputStandard, outputStandard);
+        inputUnits = `${units[inputStandard][conversionType][0]}`;
+        outputUnits = `${units[outputStandard][conversionType][0]}`;
+        calculate();
+    });
+
 
     // event listeners for selecting US/metric standard for input --> initiates calculation if input is present
     metricSelectorEl.addEventListener('click', () => {
         generateDropdown('metric', 'US');
         inputStandard = "metric";
-        inputUnits = "mm";
+        inputUnits = `${units[inputStandard][conversionType][0]}`;
         outputStandard = "US";
-        outputUnits = "in";
+        outputUnits = `${units[outputStandard][conversionType][0]}`;
         calculate();
     });
     USSelectorEl.addEventListener('click', () => {
         generateDropdown('US', 'metric');
         inputStandard = "US";
-        inputUnits = "in";
+        inputUnits = `${units[inputStandard][conversionType][0]}`;
         outputStandard = "metric";
-        outputUnits = "mm";
+        outputUnits = `${units[outputStandard][conversionType][0]}`;
         calculate();
     })
 
     // event listener for selecting input units
     inputUnitDropdownEl.addEventListener('change', (e) => {
         const selectedIndex = e.target.options.selectedIndex;
-        inputUnits = units[inputStandard][selectedIndex];
+        inputUnits = units[inputStandard][conversionType][selectedIndex];
         calculate();
         console.log('input units: ', inputUnits);
     })
@@ -84,8 +124,8 @@
     // need to update the output units based on the selection of the output unit selector
     outputUnitDropdownEl.addEventListener('change', (e) => {
         const selectedIndex = e.target.options.selectedIndex; // index of the units array that was selected
-        outputUnitEl.innerHTML = units[outputStandard][selectedIndex];
-        outputUnits =  units[outputStandard][selectedIndex];
+        outputUnitEl.innerHTML = units[outputStandard][conversionType][selectedIndex];
+        outputUnits =  units[outputStandard][conversionType][selectedIndex];
         console.log('output standard: ', outputStandard);
         calculate();
         console.log('output units: ', outputUnits);
@@ -117,42 +157,81 @@
             alert('no alphanumeric characters allowed');
         } 
 
+        if (!inputValue) {
+            inputValue = NaN; // so that the default isn't 0 when it's empty. messes up temp. 
+        }
+
         calculate();
     })
 
     function calculate() {
         const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
-        console.log(valueToConvert, inputUnits, outputUnits); // FINALLY WORKING
+        console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
 
         // convert everything to a baseline standard (ft or m) then calculate the output
-        const conversionConstantstoStandardFootOrMeter = {
+        const conversionConstantstoStandardMeasurement = {
             metric: { // conversions to 1 meter
-                in: 39.3701,
-                ft: 3.28084,
-                m: 1, 
-                yd: 1.09361,
-                mi: 0.000621371,
-                mm: 1000,
-                cm: 100,
-                km: .001
+                length: {
+                    in: 39.3701,
+                    ft: 3.28084,
+                    m: 1, 
+                    yd: 1.09361,
+                    mi: 0.000621371,
+                    mm: 1000,
+                    cm: 100,
+                    km: .001
                 },
+                weight: { // conversions to 1kg
+                    mg: 1000000,
+                    g: 1000,
+                    kg: 1,
+                    oz: 35.274,
+                    lb: 2.20462,
+                    ton: 0.00110231,
+                }
+            },
             US: { // conversions to 1 foot
-                in: 12,
-                ft: 1,
-                yd: 1/3,
-                mi: 1/5280,
-                mm: 304.8,
-                cm: 30.48,
-                m: .3048,
-                km: .0003048
+                length: {
+                    in: 12,
+                    ft: 1,
+                    yd: 1/3,
+                    mi: 1/5280,
+                    mm: 304.8,
+                    cm: 30.48,
+                    m: .3048,
+                    km: .0003048
+                },
+                weight: { // conversion to 1lb
+                    mg: 453592,
+                    g: 453.592,
+                    kg: 0.453592,
+                    oz: 16,
+                    lb: 1,
+                    ton: 0.0005,
+                }
             }
         }
 
-        let ftMeterConversionFactor = inputStandard === 'metric' ? 3.28084 : 0.3048; // number of ft/meter and vice versa for conversion
+        const conversionFactors = {
+            length: {
+                metric: 3.28084, // number of feet in a meter
+                US: 0.3048 // number of meters in a foot
+            },
+            weight: {
+                metric: 2.20462, // lb in kg
+                US: 0.453592 // kg in a lb
+            }
+        }
 
-        // converts the input to standard based on input standard (1 m or 1 ft), then converts that to the right output units
-        let outputValue = valueToConvert/conversionConstantstoStandardFootOrMeter[inputStandard][inputUnits] * ftMeterConversionFactor * conversionConstantstoStandardFootOrMeter[outputStandard][outputUnits];
-
+        let outputValue;
+        if (conversionType !== 'temperature') {
+            let ftMeterConversionFactor = inputStandard === 'metric' ? conversionFactors[conversionType].metric : conversionFactors[conversionType].US; // number of ft/meter and vice versa for conversion
+            // converts the input to standard based on input standard (1 m or 1 ft), then converts that to the right output units
+            outputValue = valueToConvert/conversionConstantstoStandardMeasurement[inputStandard][conversionType][inputUnits] * ftMeterConversionFactor * conversionConstantstoStandardMeasurement[outputStandard][conversionType][outputUnits];
+        } else {
+            outputValue = inputStandard === 'metric' ? inputValue * (9/5) + 32 : (inputValue - 32) * (5/9);
+        }
+        
         if (outputValue) {
             outputEl.innerHTML = outputValue.toFixed(4); 
         } else {
