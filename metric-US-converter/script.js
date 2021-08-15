@@ -233,9 +233,9 @@
         }
         
         if (outputValue) {
-            outputEl.innerHTML = outputValue.toFixed(4); 
+            outputEl.innerHTML = outputValue.toFixed(3); 
         } else {
-            outputEl.innerHTML = '_.____';
+            outputEl.innerHTML = '_.___';
         }
         console.log(outputValue);
 
@@ -243,3 +243,5 @@
         // 10cm/100cmPerMeter m * 3.28 ft/meter 
         // input / conversion[inputStandard][inputUnits] (m)  * ftPermeter (ft) * conversion[outputStandard][outputUnits] 
     }
+
+
