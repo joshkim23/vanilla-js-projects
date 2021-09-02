@@ -23,20 +23,24 @@
                 <div style="margin: 10px">
                     $
                     <input type="text" value="0" class="input-value" style="width: 100px"/>
-                    <br />
-                </div>
-                <select name="unit-selector" class ="input-unit-dropdown"></select>
-                <span style="padding: 5px"> to </span>
+                    
+                    <div style="padding-top: 10px">
+                        <select name="unit-selector" class ="input-unit-dropdown"></select>
+                        <span style="padding: 5px"> to </span>
 
-                <select name="output-unit-dropdown" class="output-unit-dropdown" style="margin-bottom:10px"></select>
-                
-                <br/>
+                        <select name="output-unit-dropdown" class="output-unit-dropdown" style="margin-bottom:10px"></select>
+                    </div>
+                </div>
 
                 <span style="padding: 5px"> with </span>
-                
+
                 <input class="tax-value" type="text" value="30" style="width:25px"/>
 
-                <span>% tax</span>
+                <span>% tax and </span>
+
+                <input class="percentage" type="text" value="33" style="width:25px"/>
+
+                <span>% of your income towards rent</span>
 
                 
 
@@ -46,7 +50,7 @@
             <div class = "output">
                 <span> = </span>
                 $
-                <span class="converted-value"  style="width: 50px"> 0.00 </span>
+                <span class="converted-value"  style="font-weight: 1000"> 0.00 </span>
                 <span class="output-units"></span>
             </div>
 

@@ -5,6 +5,7 @@ const salarySelectorEl = document.querySelector('.salary-selector');
 // $$$ input
 const inputFieldAmount = document.querySelector('.input-value');
 const taxPercentageEl = document.querySelector('.tax-value');
+const salaryToRentProportion = document.querySelector('.percentage');
 
 // $$$ output
 const outputField = document.querySelector('.converted-value');
@@ -26,6 +27,7 @@ let inputMetric = rentUnits[input];
 let outputMetric = rentUnits[output];
 let inputDollarValue; 
 let taxValue = '30';
+let salaryRentProportion = '33';
 
 function start() {
     generateDropdown('rent', 'salary');
@@ -63,6 +65,7 @@ function generateDropdown(standard, opposite) {
 }
 
 
+
 // create map of all numbers and decimal
 const legalValues = new Map();
 for (let i=0; i<10; i++) {
@@ -71,6 +74,20 @@ for (let i=0; i<10; i++) {
 legalValues.set('.', 0);
 legalValues.set('', '');
 console.log(legalValues);
+
+salaryToRentProportion.addEventListener('input', (e) => {
+    salaryRentProportion = e.target.value;
+    let mostRecentInput = taxValue.charAt(inputValue.length-1);
+    if (!legalValues.has(mostRecentInput)) {
+        alert('no alphanumeric characters allowed');
+    } 
+
+    if (!inputValue) {
+        salaryRentProportion = '0'; // so that the default isn't 0 when it's empty. messes up temp. 
+    }
+
+    calculate();
+})
 
 taxPercentageEl.addEventListener('input', (e) => {
     taxValue = e.target.value;
@@ -107,10 +124,13 @@ function calculate() {
 
     let outputDollarValue;
 
+    let taxPercentage = 1 - parseFloat(taxValue)/100;
+    let percentageOfSalaryToRent = parseFloat(salaryRentProportion)/100;
+
     if (input === 'rent') {
-        outputDollarValue = 12 * inputValue / ((1-parseFloat(taxValue)/100)*.33); // AS = (12 * R) / (P * (1-T))
+        outputDollarValue = 12 * inputValue / (taxPercentage * percentageOfSalaryToRent); // AS = (12 * R) / (P * (1-T))
     } else if (input === 'salary') {
-        outputDollarValue = ((1-parseFloat(taxValue)/100) * inputValue * .33)/12; // R = ((1-T) * AS * P) / 12
+        outputDollarValue = (taxPercentage * inputValue * percentageOfSalaryToRent)/12; // R = ((1-T) * AS * P) / 12
     }
 
     outputDollarValue = formatOutput(outputDollarValue);
