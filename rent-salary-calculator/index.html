@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rent-Salary-Calculator</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="rent_script.js" defer></script>
+    </head>
+    <body>
+        <div class = "mainBox">
+            <h3 class = "header">How much can you afford?</h3>
+
+            <div class = "selections">
+                <div>
+                    <input class = "rent-selector" type="radio" id="rent" name="standardSelection" value = "rent" checked>
+                    <label for="rent">Rent</label>
+
+                    <input class = "salary-selector" type="radio" id="salary" name="standardSelection" value="salary">
+                    <label for="salary">Salary</label>
+                </div>
+
+                <div style="margin: 10px">
+                    $
+                    <input type="text" value="0" class="input-value" style="width: 100px"/>
+                    <br />
+                </div>
+                <select name="unit-selector" class ="input-unit-dropdown"></select>
+                <span style="padding: 5px"> to </span>
+
+                <select name="output-unit-dropdown" class="output-unit-dropdown" style="margin-bottom:10px"></select>
+                
+                <br/>
+
+                <span style="padding: 5px"> with </span>
+
+                <input class="tax-value" type="text" value="30" style="width:25px"/>
+
+                <span>% tax</span>
+
+                
+
+            </div>
+
+            <br/>
+            <div class = "output">
+                <span> = </span>
+                $
+                <span class="converted-value"  style="width: 50px"> 0.00 </span>
+                <span class="output-units"></span>
+            </div>
+
+        </div>
+    </body>
+</html>
+
+<!-- 4101382706 confirmation code || Christina manager at Synchrony-->
