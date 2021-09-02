@@ -16,7 +16,7 @@ const outputDropdownEl = document.querySelector('.output-unit-dropdown');
 
 const rentUnits = {
     rent: 'monthly rent',
-    salary: 'annual salary'
+    salary: 'annual salary before tax'
 };
 
 let input = 'rent';
@@ -25,7 +25,7 @@ let output = 'salary'
 let inputMetric = rentUnits[input];
 let outputMetric = rentUnits[output];
 let inputDollarValue; 
-let taxValue = .3;
+let taxValue = '30';
 
 function start() {
     generateDropdown('rent', 'salary');
@@ -62,21 +62,6 @@ function generateDropdown(standard, opposite) {
     outputDropdownEl.appendChild(outputEl);
 }
 
-taxPercentageEl.addEventListener('input', (e) => {
-    taxValue = e.target.value;
-    let mostRecentInput = inputValue.charAt(inputValue.length-1);
-    console.log(mostRecentInput);
-    if (!legalValues.has(mostRecentInput)) {
-        alert('no alphanumeric characters allowed');
-    } 
-
-    if (!inputValue) {
-        inputValue = NaN; // so that the default isn't 0 when it's empty. messes up temp. 
-    }
-
-    calculate();
-})
-
 
 // create map of all numbers and decimal
 const legalValues = new Map();
@@ -86,6 +71,20 @@ for (let i=0; i<10; i++) {
 legalValues.set('.', 0);
 legalValues.set('', '');
 console.log(legalValues);
+
+taxPercentageEl.addEventListener('input', (e) => {
+    taxValue = e.target.value;
+    let mostRecentInput = taxValue.charAt(inputValue.length-1);
+    if (!legalValues.has(mostRecentInput)) {
+        alert('no alphanumeric characters allowed');
+    } 
+
+    if (!inputValue) {
+        taxValue = '0'; // so that the default isn't 0 when it's empty. messes up temp. 
+    }
+
+    calculate();
+})
 
 inputFieldAmount.addEventListener('input', (e) => {
     inputValue = e.target.value;
@@ -104,18 +103,23 @@ inputFieldAmount.addEventListener('input', (e) => {
 
 function calculate() {
     const valueToConvert = Number(inputValue);
-    console.log(valueToConvert, input);
+    console.log(valueToConvert, 'tax :', parseFloat(taxValue),input, output, rentUnits[input]);
 
     let outputDollarValue;
 
     if (input === 'rent') {
-        outputDollarValue = inputValue * 12 / taxValue / .66;
+        outputDollarValue = 12 * inputValue / ((1-parseFloat(taxValue)/100)*.33); // AS = (12 * R) / (P * (1-T))
     } else if (input === 'salary') {
-        outputDollarValue = inputValue * (1-taxValue) / 12 * .33;
+        outputDollarValue = ((1-parseFloat(taxValue)/100) * inputValue * .33)/12; // R = ((1-T) * AS * P) / 12
     }
 
+    outputDollarValue = formatOutput(outputDollarValue);
+
     outputField.innerHTML = outputDollarValue.toFixed(2).toString();
-    outputText.innerHTML = outputMetric.toString();
+    outputText.innerHTML = rentUnits[output];
 
+}
 
+function formatOutput(input) {
+    return input;
 }
