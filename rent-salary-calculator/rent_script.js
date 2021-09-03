@@ -112,7 +112,7 @@ inputFieldAmount.addEventListener('input', (e) => {
     } 
 
     if (!inputValue) {
-        inputValue = NaN; // so that the default isn't 0 when it's empty. messes up temp. 
+        inputValue = '0'; // so that the default isn't 0 when it's empty. messes up temp. 
     }
 
     calculate();
@@ -120,7 +120,7 @@ inputFieldAmount.addEventListener('input', (e) => {
 
 function calculate() {
     const valueToConvert = Number(inputValue);
-    console.log(valueToConvert, 'tax :', parseFloat(taxValue),input, output, rentUnits[input]);
+    // console.log(valueToConvert, 'tax :', parseFloat(taxValue),input, output, rentUnits[input]);
 
     let outputDollarValue;
 

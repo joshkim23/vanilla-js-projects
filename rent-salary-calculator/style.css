@@ -34,3 +34,18 @@ body {
 .selections {
     width: auto;
 }
+
+.converted-value {
+    font-size: 1.5rem;
+}
+
+input {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    width: 40px;
+    text-align: center;
+}
+
+select {
+    font-family: "Poppins", sans-serif;
+}
