@@ -15,11 +15,13 @@ const outputText = document.querySelector('.output-units');
 const inputDropdownEl = document.querySelector('.input-unit-dropdown');
 const outputDropdownEl = document.querySelector('.output-unit-dropdown');
 
+// constant reference
 const rentUnits = {
     rent: 'monthly rent',
     salary: 'annual salary before tax'
 };
 
+// stages for the app 
 let input = 'rent';
 let inputValue = '0';
 let output = 'salary'
@@ -29,6 +31,7 @@ let inputDollarValue;
 let taxValue = '30';
 let salaryRentProportion = '33';
 
+// initiate the dropdown and output data
 function start() {
     generateDropdown('rent', 'salary');
     outputText.innerHTML = outputMetric;
@@ -36,6 +39,7 @@ function start() {
 start();
 
 
+// conversion selection element event listeners
 rentSelectorEl.addEventListener('click', () => {
     input = 'rent';
     output = 'salary'
@@ -74,6 +78,7 @@ for (let i=0; i<10; i++) {
 legalValues.set('.', 0);
 legalValues.set('', '');
 
+// input value event listeners - should be consolidated
 salaryToRentProportion.addEventListener('input', (e) => {
     salaryRentProportion = e.target.value;
     let mostRecentInput = taxValue.charAt(inputValue.length-1);
@@ -117,6 +122,7 @@ inputFieldAmount.addEventListener('input', (e) => {
     calculate();
 })
 
+// calculates the output and formats the output
 function calculate() {
     const valueToConvert = Number(inputValue);
     let outputDollarValue;
@@ -146,11 +152,11 @@ function calculate() {
 }
 
 
-
+// transform the number with decimals to a string with commas up to two decimal places. 
 function formatOutput(input) {
     let formattedOutput = input.toFixed(2); // 
     formattedOutput = formattedOutput.toString();
-    console.log('pre-formatted output: ',formattedOutput);
+    // console.log('pre-formatted output: ',formattedOutput);
 
     let subStrings = [];
     let runningSubstring = '';
@@ -168,7 +174,7 @@ function formatOutput(input) {
             runningSubstring = formattedOutput.charAt(i);
         }
         
-
+        // if there are three digits, add the substring and restart, or if you reach the last one, add what you have to the beginning of the substring array
         if (runningSubstring.length === 3) {
             subStrings.unshift(reverseString(runningSubstring));
             runningSubstring = '';
@@ -176,10 +182,9 @@ function formatOutput(input) {
             subStrings.unshift(reverseString(runningSubstring));
         }
         i--;
-
     }
 
-    console.log(subStrings);
+    // concatenates the substring array, adding commas to everything except for the last one before the decimals
     let finalOutput = '';
     for (let i=0; i<subStrings.length; i++) {
         if (i < subStrings.length-2) {
