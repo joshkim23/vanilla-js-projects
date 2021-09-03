@@ -73,7 +73,6 @@ for (let i=0; i<10; i++) {
 }
 legalValues.set('.', 0);
 legalValues.set('', '');
-console.log(legalValues);
 
 salaryToRentProportion.addEventListener('input', (e) => {
     salaryRentProportion = e.target.value;
@@ -106,7 +105,7 @@ taxPercentageEl.addEventListener('input', (e) => {
 inputFieldAmount.addEventListener('input', (e) => {
     inputValue = e.target.value;
     let mostRecentInput = inputValue.charAt(inputValue.length-1);
-    console.log(mostRecentInput);
+
     if (!legalValues.has(mostRecentInput)) {
         alert('no alphanumeric characters allowed');
     } 
@@ -120,26 +119,85 @@ inputFieldAmount.addEventListener('input', (e) => {
 
 function calculate() {
     const valueToConvert = Number(inputValue);
-    // console.log(valueToConvert, 'tax :', parseFloat(taxValue),input, output, rentUnits[input]);
-
     let outputDollarValue;
-
     let taxPercentage = 1 - parseFloat(taxValue)/100;
     let percentageOfSalaryToRent = parseFloat(salaryRentProportion)/100;
 
+    /*
+        Calculated using two equations: 
+            1. ASAT * P = 12 * R
+            2. ASAT = (1-T) * AS 
+        ASAT = annual salary after tax
+        P = percentage of salary towards rent
+        R = rent 
+        T = tax percentage
+        AS = annual salary BEFORE tax
+    */
     if (input === 'rent') {
-        outputDollarValue = 12 * inputValue / (taxPercentage * percentageOfSalaryToRent); // AS = (12 * R) / (P * (1-T))
+        outputDollarValue = 12 * inputValue / (taxPercentage * percentageOfSalaryToRent); // AS = (12 * R) / (P * (1-T)) 
     } else if (input === 'salary') {
-        outputDollarValue = (taxPercentage * inputValue * percentageOfSalaryToRent)/12; // R = ((1-T) * AS * P) / 12
+        outputDollarValue = (taxPercentage * inputValue * percentageOfSalaryToRent)/12; // R = ((1-T) * AS * P) / 12 
     }
 
-    outputDollarValue = formatOutput(outputDollarValue);
+    outputDollarValue = formatOutput(outputDollarValue); // converts number to string with two decimal places
 
-    outputField.innerHTML = outputDollarValue.toFixed(2).toString();
+    outputField.innerHTML = outputDollarValue;
     outputText.innerHTML = rentUnits[output];
-
 }
 
+
+
 function formatOutput(input) {
-    return input;
+    let formattedOutput = input.toFixed(2); // 
+    formattedOutput = formattedOutput.toString();
+    console.log('pre-formatted output: ',formattedOutput);
+
+    let subStrings = [];
+    let runningSubstring = '';
+
+    // add decimal and decimal place portion
+    subStrings[0] = formattedOutput.substring(formattedOutput.length-3, formattedOutput.length); // get the string from the decimal on
+
+    let i=formattedOutput.length-4;
+
+    while (formattedOutput.charAt(i) && runningSubstring.length < 3) {
+        console.log(runningSubstring);
+        if (runningSubstring.length) {
+            runningSubstring += formattedOutput.charAt(i);
+        } else {
+            runningSubstring = formattedOutput.charAt(i);
+        }
+        
+
+        if (runningSubstring.length === 3) {
+            subStrings.unshift(reverseString(runningSubstring));
+            runningSubstring = '';
+        } else if (i - 1< 0) {
+            subStrings.unshift(reverseString(runningSubstring));
+        }
+        i--;
+
+    }
+
+    console.log(subStrings);
+    let finalOutput = '';
+    for (let i=0; i<subStrings.length; i++) {
+        if (i < subStrings.length-2) {
+            finalOutput += subStrings[i] + ',';
+        } else {
+            finalOutput += subStrings[i];
+        }
+        
+    }
+
+    return finalOutput;
+}
+
+// ** IN JS, STRINGS ARE IMMUTABLE
+function reverseString(str) {
+    let reversed = '';
+    for (let i=str.length-1; i>=0; i--) {
+        reversed += str.charAt(i);
+    }
+    return reversed;
 }
