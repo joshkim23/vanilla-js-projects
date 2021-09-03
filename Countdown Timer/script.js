@@ -6,7 +6,7 @@ const daysEl = document.getElementById('days');
 const hoursEl = document.getElementById('hours');
 const minutesEl = document.getElementById('minutes');
 const secondsEl = document.getElementById('seconds');
-const newYears = '1 Jan 2021';
+const newYears = '1 Jan 2022';
 
 
 // new Date() is a js date constructor! calling new Date() will be current date, store it in a const. the format it reads is: 'XX XXX XXXX' ex: 1 JAN 2021

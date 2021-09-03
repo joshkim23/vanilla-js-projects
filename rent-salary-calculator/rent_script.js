@@ -21,13 +21,13 @@ const rentUnits = {
     salary: 'annual salary before tax'
 };
 
-// stages for the app 
+// initial states for the app 
 let input = 'rent';
 let inputValue = '0';
 let output = 'salary'
 let inputMetric = rentUnits[input];
 let outputMetric = rentUnits[output];
-let inputDollarValue; 
+let inputDollarValue = "0"; 
 let taxValue = '30';
 let salaryRentProportion = '33';
 
@@ -120,34 +120,31 @@ inputFieldAmount.addEventListener('input', (e) => {
     }
 
     calculate();
-})
+});
 
-// calculates the output and formats the output
+/* 
+    Calculates the output and sends it for formatting, then changes the innerHTML 
+        1. ASAT * P = 12 * R
+        2. ASAT = (1-T) * AS 
+    ASAT = annual salary after tax
+    P = percentage of salary towards rent
+    R = rent 
+    T = tax percentage
+    AS = annual salary BEFORE tax
+*/
 function calculate() {
-    const valueToConvert = Number(inputValue);
-    let outputDollarValue;
-    let taxPercentage = 1 - parseFloat(taxValue)/100;
-    let percentageOfSalaryToRent = parseFloat(salaryRentProportion)/100;
+    let outputDollarValue; // R or AS
+    let inputValueToNumber = parseFloat(inputValue); // R or AS
+    let taxPercentage = 1 - parseFloat(taxValue)/100; // T
+    let percentageOfSalaryToRent = parseFloat(salaryRentProportion)/100; // P
 
-    /*
-        Calculated using two equations: 
-            1. ASAT * P = 12 * R
-            2. ASAT = (1-T) * AS 
-        ASAT = annual salary after tax
-        P = percentage of salary towards rent
-        R = rent 
-        T = tax percentage
-        AS = annual salary BEFORE tax
-    */
     if (input === 'rent') {
-        outputDollarValue = 12 * inputValue / (taxPercentage * percentageOfSalaryToRent); // AS = (12 * R) / (P * (1-T)) 
+        outputDollarValue = (12 * inputValueToNumber)/(taxPercentage * percentageOfSalaryToRent); // AS = (12 * R) / (P * (1-T)) 
     } else if (input === 'salary') {
-        outputDollarValue = (taxPercentage * inputValue * percentageOfSalaryToRent)/12; // R = ((1-T) * AS * P) / 12 
+        outputDollarValue = (taxPercentage * inputValueToNumber * percentageOfSalaryToRent)/12; // R = ((1-T) * AS * P) / 12 
     }
 
-    outputDollarValue = formatOutput(outputDollarValue); // converts number to string with two decimal places
-
-    outputField.innerHTML = outputDollarValue;
+    outputField.innerHTML = formatOutput(outputDollarValue); // converts number to string with two decimal places
     outputText.innerHTML = rentUnits[output];
 }
 
@@ -166,8 +163,9 @@ function formatOutput(input) {
 
     let i=formattedOutput.length-4;
 
+    // goes through the remainder of the number and splits it into 3 char chunks into the substrings array to be formatted for commas
     while (formattedOutput.charAt(i) && runningSubstring.length < 3) {
-        console.log(runningSubstring);
+        // add the chars backwards - will reverse later
         if (runningSubstring.length) {
             runningSubstring += formattedOutput.charAt(i);
         } else {
@@ -192,9 +190,7 @@ function formatOutput(input) {
         } else {
             finalOutput += subStrings[i];
         }
-        
-    }
-
+    };
     return finalOutput;
 }
 
