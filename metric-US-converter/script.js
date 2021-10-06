@@ -33,7 +33,7 @@
         }
     }
 
-    // states for the app that are used to calculate the output - initialized for start of app to be in metric
+    // STATES for the app that are used to calculate the output - initialized for start of app to be in metric
     let conversionType = "length";
     let inputStandard = "metric";
     let outputStandard = "US";
@@ -226,12 +226,92 @@
         }
     }
 
+    /* 
+        workingNumbers = [
+                            [55, 12, 5],
+                            [23, 24]
+                         ]
+        operands = [+, -, /, +]
+
+        --> results in (55 + 12 - 5)/(23+24)
+        ** have a 2d array, each row is a layer of parentheses? then iterate through the array and operands
+    */
+
+    // converts the input data from an array of all chars into two different arrays: working numbers and operands. 
+    // working numbers array is a 2d array where each row is a grouped paranthetical expression to be solved downstream. 
+    // operands array has all of the operations done in order
+    // Both arrays will be used to calculate the arithmetic result. CURRENTLY DOES NOT SUPPORT PEMDAS IN ONE PARANTHETICAL LAYER: ie (5+4/3) will be incorrect
+    function arithmeticResult(input) {
+        console.log('input array: ',input);
+        let result;
+        let workingNumbers = [[''],['']];
+        let runningWorkingNumber = '';
+        let operands = [];
+        let workingNumbersRow = 0;
+        let workingNumbersCol = 0;
+        let inputIndex = 0;
+
+        // test: (12+5)/4
+        // generates the working numbers array and operands array
+        while (inputIndex < input.length) {
+            //console.log('input index: ', inputIndex);
+            // iterate the row index to allow for a new "set" of operations within a parentheses expression
+            if (input[inputIndex] === ')') {
+                //console.log('close parentheses', 'index:',inputIndex);
+                workingNumbersRow++;
+                workingNumbersCol = 0;
+            }
+
+            // add the operands to the operands array
+            if (operandsMap.has(input[inputIndex])) {
+                operands.push(input[inputIndex]);
+                if (runningWorkingNumber) {
+                    //console.log('writing this value: ', Number(runningWorkingNumber), 'to row: ', workingNumbersRow, 'col: ', workingNumbersCol);
+                    workingNumbers[workingNumbersRow][workingNumbersCol] = runningWorkingNumber;
+                    workingNumbersCol++;
+                    runningWorkingNumber = '';
+                }
+            }
+
+            // add a number from strings until you hit an operand
+            if (!operandsMap.has(input[inputIndex]) && input[inputIndex] !== '(' && input[inputIndex] !== ')') { // if input char is not an operand, and is not a parentheses --> its a number
+                // console.log('input value: ',input[inputIndex]);    
+   
+                runningWorkingNumber += input[inputIndex];
+
+                if (input[inputIndex + 1 ] === ')' || operandsMap.has(input[inputIndex]) || inputIndex + 1 === input.length) {
+                    //console.log('writing this value: ', Number(runningWorkingNumber), 'to row: ', workingNumbersRow, 'col: ', workingNumbersCol);
+                    workingNumbers[workingNumbersRow][workingNumbersCol] = runningWorkingNumber;
+                    workingNumbersCol++;
+                    runningWorkingNumber = '';
+                } 
+                
+            } 
+            inputIndex++;
+        }
+
+        console.log('working numbers array where each row is a parenthetical expression: ', workingNumbers);
+        console.log('list of all operands used in order: ',operands);
+
+        // calculates the arithmetic result using the tool arrays
+        let operandIndex = 0;
+        let runningResult = 0;
+        for (let i=0; i<workingNumbers.length; i++) {
+            for (let j=0; j<workingNumbers[i].length; j++) {
+                
+            }
+        }
+    }
+
+
+
     function calculate() {
-        let readyToCalculate = assessUserInput(inputValue);
-        console.log(readyToCalculate);
+        let userInputResult = assessUserInput(inputValue);
+        console.log('user input validation check response: ',userInputResult);
 
-        if (readyToCalculate?.status) { // NEED TO ADD THE QUESTION MARK OR ELSE IT DOESN'T WORK. Since readyToCalculate is not predefined, it doesn't know if it has a property named status or if it's even an object
-
+        if (userInputResult?.status) { // NEED TO ADD THE QUESTION MARK OR ELSE IT DOESN'T WORK. Since userInputResult is not predefined, it doesn't know if it has a property named status or if it's even an object
+            arithmeticResult(userInputResult?.inputArray);
+            
             const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
             console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
 
