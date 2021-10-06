@@ -1,6 +1,6 @@
 //need to get the city id, then get the weather info 
 // from https://openweathermap.org/current
-const apikey = ""; // get your own api key bro
+const apikey = "49b6c83e9b6c72909dd402b6103e26a6"; // get your own api key bro
 
 
 const form = document.getElementById("form");

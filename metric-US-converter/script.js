@@ -143,8 +143,21 @@
     for (let i=0; i<10; i++) {
         legalValues.set(i.toString(), i.toString()); // (number, string of number)
     }
-    legalValues.set('.', 0);
-    legalValues.set('', '');
+
+    // create map of all operands for calculations MINUS THE PARENS
+    const arithmeticRelatedChars = ['.','+', '-', '/', '*'];
+    const operandsMap = new Map(); 
+    for (let i=0; i<arithmeticRelatedChars.length; i++) {
+        operandsMap.set(arithmeticRelatedChars[i], '');
+    }
+
+    // add operands to legal values
+    for (let i=0; i<arithmeticRelatedChars.length; i++) {
+        legalValues.set(arithmeticRelatedChars[i], '');
+    }
+    legalValues.set('',''); // make sure to include empty string as a legal value
+    legalValues.set('(',''); // add the parentheses to legal values
+    legalValues.set(')','');
     console.log(legalValues);
 
 
@@ -152,7 +165,7 @@
     inputValueEl.addEventListener('input', (e) => {
         inputValue = e.target.value;
         let mostRecentInput = inputValue.charAt(inputValue.length-1);
-        console.log(mostRecentInput);
+        // console.log(mostRecentInput);
         if (!legalValues.has(mostRecentInput)) {
             alert('no alphanumeric characters allowed');
         } 
@@ -164,84 +177,128 @@
         calculate();
     })
 
+    // checks to make sure that parentheses are balanced, no consecutive operands, does not end with a operand or parentheses
+    function assessUserInput(input) {
+        let parenthesesStack = [];
+        let operandsStack = [];
+        console.log(input);
+
+        // check for balanced parentheses
+        for (let i=0; i<input.length; i++) {
+            operandsStack.push(input.charAt(i));
+            if (i === 0 && input.charAt(i) === ')' || i === 0 && operandsMap.has(input.charAt(i))) {
+                console.log('First input was a closed parentheses or an operand')
+                return false; 
+            }
+            if (input.charAt(i) === '(') {
+                parenthesesStack.push('(');
+            }
+            if (input.charAt(i) === ')' && parenthesesStack[parenthesesStack.length-1] === '(') {
+                parenthesesStack.pop();
+                // console.log(parenthesesStack);
+            }
+            // checking for consecutive operands
+            if (operandsMap.has(input.charAt(i)) && operandsMap.has(operandsStack[operandsStack.length-2])) {
+                console.log('USED TWO CONSECUTIVE OPERANDS');
+                console.log(operandsStack);
+                return false;
+            } 
+
+            // make sure the last char is not an operand or open parentheses
+            if (i === input.length-1 && operandsMap.has(input.charAt(i)) || i === input.length-1 && input.charAt(i) === '(') {
+                console.log('ENDED WITH AN OPERAND OR AN OPEN PARENTHESES');
+                return false;
+            }
+        }
+        if (parenthesesStack.length === 0) {
+            return true; // if you get here, the operands rule is met and the parentheses are balanced
+        } else {
+            return false;
+        }
+    }
+
     function calculate() {
-        const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
-        console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
+        let readyToCalculate = assessUserInput(inputValue);
 
-        // convert everything to a baseline standard (ft or m) then calculate the output
-        const conversionConstantstoStandardMeasurement = {
-            metric: { // conversions to 1 meter
-                length: {
-                    in: 39.3701,
-                    ft: 3.28084,
-                    m: 1, 
-                    yd: 1.09361,
-                    mi: 0.000621371,
-                    mm: 1000,
-                    cm: 100,
-                    km: .001
+        if (readyToCalculate) {
+            const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
+            console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
+
+            // convert everything to a baseline standard (ft or m) then calculate the output
+            const conversionConstantstoStandardMeasurement = {
+                metric: { // conversions to 1 meter
+                    length: {
+                        in: 39.3701,
+                        ft: 3.28084,
+                        m: 1, 
+                        yd: 1.09361,
+                        mi: 0.000621371,
+                        mm: 1000,
+                        cm: 100,
+                        km: .001
+                    },
+                    weight: { // conversions to 1kg
+                        mg: 1000000,
+                        g: 1000,
+                        kg: 1,
+                        oz: 35.274,
+                        lb: 2.20462,
+                        ton: 0.00110231,
+                    }
                 },
-                weight: { // conversions to 1kg
-                    mg: 1000000,
-                    g: 1000,
-                    kg: 1,
-                    oz: 35.274,
-                    lb: 2.20462,
-                    ton: 0.00110231,
-                }
-            },
-            US: { // conversions to 1 foot
-                length: {
-                    in: 12,
-                    ft: 1,
-                    yd: 1/3,
-                    mi: 1/5280,
-                    mm: 304.8,
-                    cm: 30.48,
-                    m: .3048,
-                    km: .0003048
-                },
-                weight: { // conversion to 1lb
-                    mg: 453592,
-                    g: 453.592,
-                    kg: 0.453592,
-                    oz: 16,
-                    lb: 1,
-                    ton: 0.0005,
+                US: { // conversions to 1 foot
+                    length: {
+                        in: 12,
+                        ft: 1,
+                        yd: 1/3,
+                        mi: 1/5280,
+                        mm: 304.8,
+                        cm: 30.48,
+                        m: .3048,
+                        km: .0003048
+                    },
+                    weight: { // conversion to 1lb
+                        mg: 453592,
+                        g: 453.592,
+                        kg: 0.453592,
+                        oz: 16,
+                        lb: 1,
+                        ton: 0.0005,
+                    }
                 }
             }
-        }
 
-        const conversionFactors = {
-            length: {
-                metric: 3.28084, // number of feet in a meter
-                US: 0.3048 // number of meters in a foot
-            },
-            weight: {
-                metric: 2.20462, // lb in kg
-                US: 0.453592 // kg in a lb
+            const conversionFactors = {
+                length: {
+                    metric: 3.28084, // number of feet in a meter
+                    US: 0.3048 // number of meters in a foot
+                },
+                weight: {
+                    metric: 2.20462, // lb in kg
+                    US: 0.453592 // kg in a lb
+                }
             }
-        }
 
-        let outputValue;
-        if (conversionType !== 'temperature') {
-            let ftMeterConversionFactor = inputStandard === 'metric' ? conversionFactors[conversionType].metric : conversionFactors[conversionType].US; // number of ft/meter and vice versa for conversion
-            // converts the input to standard based on input standard (1 m or 1 ft), then converts that to the right output units
-            outputValue = valueToConvert/conversionConstantstoStandardMeasurement[inputStandard][conversionType][inputUnits] * ftMeterConversionFactor * conversionConstantstoStandardMeasurement[outputStandard][conversionType][outputUnits];
-        } else {
-            outputValue = inputStandard === 'metric' ? inputValue * (9/5) + 32 : (inputValue - 32) * (5/9);
-        }
-        
-        if (outputValue) {
-            outputEl.innerHTML = outputValue.toFixed(3); 
-        } else {
-            outputEl.innerHTML = '_.___';
-        }
-        console.log(outputValue);
+            let outputValue;
+            if (conversionType !== 'temperature') {
+                let ftMeterConversionFactor = inputStandard === 'metric' ? conversionFactors[conversionType].metric : conversionFactors[conversionType].US; // number of ft/meter and vice versa for conversion
+                // converts the input to standard based on input standard (1 m or 1 ft), then converts that to the right output units
+                outputValue = valueToConvert/conversionConstantstoStandardMeasurement[inputStandard][conversionType][inputUnits] * ftMeterConversionFactor * conversionConstantstoStandardMeasurement[outputStandard][conversionType][outputUnits];
+            } else {
+                outputValue = inputStandard === 'metric' ? inputValue * (9/5) + 32 : (inputValue - 32) * (5/9);
+            }
+            
+            if (outputValue) {
+                outputEl.innerHTML = outputValue.toFixed(3); 
+            } else {
+                outputEl.innerHTML = '_.___';
+            }
+            console.log(outputValue);
 
-        // ex: 10cm to ft , inputStandard: metric, input units: cm, output units: ft
-        // 10cm/100cmPerMeter m * 3.28 ft/meter 
-        // input / conversion[inputStandard][inputUnits] (m)  * ftPermeter (ft) * conversion[outputStandard][outputUnits] 
+            // ex: 10cm to ft , inputStandard: metric, input units: cm, output units: ft
+            // 10cm/100cmPerMeter m * 3.28 ft/meter 
+            // input / conversion[inputStandard][inputUnits] (m)  * ftPermeter (ft) * conversion[outputStandard][outputUnits] 
+        }
     }
 
 

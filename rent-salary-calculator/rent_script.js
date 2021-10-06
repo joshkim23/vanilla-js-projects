@@ -69,7 +69,6 @@ function generateDropdown(standard, opposite) {
 }
 
 
-
 // create map of all numbers and decimal
 const legalValues = new Map();
 for (let i=0; i<10; i++) {
@@ -202,3 +201,39 @@ function reverseString(str) {
     }
     return reversed;
 }
+
+
+
+
+
+var firstObject = {
+    name: "Andrew",
+    age: "30",
+    ethnicity: "white",
+    siblings: {
+        oldest: "beth",
+        middle: "Paul",
+        youngest: "Rach"
+    },
+    parents: {
+        mom: "Teresa",
+        Dad: "Mark"
+    },
+    schoolInfo: {
+        university: "University of washington",
+        degree: "Mechanical Engineering",
+        level: "Bachelors"
+    },
+    blah: {
+        blah2: {
+            blah3: {
+
+            }
+        },
+        blah2a: {
+
+        }
+    }
+}
+
+console.log(firstObject);
