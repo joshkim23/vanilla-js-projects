@@ -183,7 +183,7 @@
         let operandsStack = [];
         console.log(input);
 
-        // check for balanced parentheses
+        // check for balanced parentheses && legal operand usage
         for (let i=0; i<input.length; i++) {
             operandsStack.push(input.charAt(i));
             if (i === 0 && input.charAt(i) === ')' || i === 0 && operandsMap.has(input.charAt(i))) {
@@ -210,17 +210,28 @@
                 return false;
             }
         }
+
+        // format the return object
         if (parenthesesStack.length === 0) {
-            return true; // if you get here, the operands rule is met and the parentheses are balanced
+            let response = {
+                status: true,
+                inputArray: operandsStack
+            }
+            return response; // if you get here, the operands rule is met and the parentheses are balanced
         } else {
-            return false;
+            let response = {
+                status: false
+            }
+            return response;
         }
     }
 
     function calculate() {
         let readyToCalculate = assessUserInput(inputValue);
+        console.log(readyToCalculate);
 
-        if (readyToCalculate) {
+        if (readyToCalculate?.status) { // NEED TO ADD THE QUESTION MARK OR ELSE IT DOESN'T WORK. Since readyToCalculate is not predefined, it doesn't know if it has a property named status or if it's even an object
+
             const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
             console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
 
