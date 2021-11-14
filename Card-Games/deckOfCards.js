@@ -6,7 +6,7 @@
 
 \*/
 
-export class deckOfCards {
+export class DeckOfCards {
     constructor() {
         this.deck = this.createNewShuffledDeck()
     }
@@ -41,7 +41,6 @@ export class deckOfCards {
             deck[indexOfValueToSwapWith] = deck[i];
             deck[i] = temp;
         }
-        console.log(deck.length)
         return deck;
     }
 
@@ -51,9 +50,8 @@ export class deckOfCards {
         
         let subDeckIndex = 0;
         for (let i=0; i<this.deck.length; i++) {
-            //subDecks[subDeckIndex].push(this.deck[i]);
             subDecks[`player${subDeckIndex+1}`].push(this.deck[i]);
-            if (subDeckIndex === 3) {
+            if (subDeckIndex === piles-1) {
                 subDeckIndex = 0;
             } else {
                 subDeckIndex++;
@@ -62,17 +60,18 @@ export class deckOfCards {
         return subDecks;
     }
 
-    createEmptySubDecks(piles) {
+    createEmptySubDecks(piles, dealer) {
         if (this.deck.length % piles !== 0) {
             console.log("please pick a number of players that is divisible by the number of cards");
             return []
         }
 
-        //let subDecks = [];
         let subDecks = {};
         for (let i=0; i<piles; i++) {
             subDecks[`player${i+1}`] = [];
-            //subDecks.push([]);
+        }
+        if (dealer) {
+            subDecks['dealer'] = [];
         }
         return subDecks;
     }
@@ -80,9 +79,37 @@ export class deckOfCards {
 
 
     // deals the deck so each person has x number of cards
-    dealDeckPartial(piles, numCards) {
-        let subDecks = this.createEmptySubDecks(piles); 
-        
+    dealDeckPartial(piles, numCards, dealer) {
+        if (piles * numCards > 52) {
+            console.log('cannot deal the deck to the specified number of piles and cards per pile. Please try again.');
+            return;
+        }
+
+        let subDecks = this.createEmptySubDecks(piles, dealer); 
+        let additionalHand;
+        if (dealer) additionalHand = 1;
+        else additionalHand = 0;
+
+        let subDeckIndex = 0;
+        for (let i=0; i<(piles+additionalHand)*numCards; i++) {
+            if (!dealer) {
+                subDecks[`player${subDeckIndex+1}`].push(this.deck.pop());
+            } else {
+                if (subDeckIndex === piles-1+additionalHand) {
+                    subDecks['dealer'].push(this.deck.pop());
+                } else {
+                    subDecks[`player${subDeckIndex+1}`].push(this.deck.pop());
+                }
+            }
+            if (subDeckIndex === piles-1+additionalHand) {
+                subDeckIndex = 0;
+            } else {
+                subDeckIndex++;
+            }
+        }
+        console.log('remaining # of cards after dealing: ', this.deck.length);
+        console.log('remaining cards: ', this.deck);
+        return subDecks;
     }
 
     // order deck from least to highest
