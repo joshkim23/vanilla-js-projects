@@ -6,7 +6,7 @@
 
 \*/
 
-export class DeckOfCards {
+class DeckOfCards {
     constructor() {
         this.deck = this.createNewShuffledDeck()
     }
@@ -107,15 +107,18 @@ export class DeckOfCards {
                 subDeckIndex++;
             }
         }
-        console.log('remaining # of cards after dealing: ', this.deck.length);
-        console.log('remaining cards: ', this.deck);
+        // console.log('remaining # of cards after dealing: ', this.deck.length);
+        // console.log('remaining cards: ', this.deck);
         return subDecks;
     }
 
-    // order deck from least to highest
+    dealOneCard() {
+        return this.deck.pop();
+    }
     
 
 
 
 }
 
+module.exports = DeckOfCards;

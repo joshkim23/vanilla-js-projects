@@ -1,0 +1,9 @@
+{
+    "type": "module",
+    "requires": "true",
+    "configurations": [
+        {
+            "type": "node"
+        }
+    ]
+}

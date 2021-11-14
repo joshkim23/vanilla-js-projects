@@ -1,4 +1,4 @@
-export const cardValues = {
+const cardValues = {
     '2': 2,
     '3': 3,
     '4': 4,
@@ -15,3 +15,5 @@ export const cardValues = {
         Low: 1
     }
 }
+
+module.exports = cardValues;
