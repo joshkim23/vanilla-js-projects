@@ -6,3 +6,7 @@ Utility Apps:
 2. Metric-US standard converter 
 3. Password generator 
 4. ToDo List
+
+(In Work) Games: 
+1. Black Jack
+2. A Deck of cards class
