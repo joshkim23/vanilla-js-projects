@@ -8,6 +8,10 @@ const rl = readline.createInterface({
     output: process.stdout
 })
 
+/* 
+    Things to add: 
+        1. Ace should be 11 until it makes the score over 21.
+*/
 
 class BlackJack {
     constructor() {
@@ -27,7 +31,12 @@ class BlackJack {
             }
             this.sums.push(this.calculateHandSums(this.hands['dealer']));
 
-            this.recursionRun();
+            if (this.sums[this.sums.length-1] === 21) {
+                console.log('GAME OVER - black jack');
+            } else {
+                this.recursionRun();
+            }
+
         })
     }
 
@@ -44,9 +53,9 @@ class BlackJack {
                 if (resp === 'H') {
                     this.hands[`player${this.numberPlayerTurn+1}`].push(this.deck.dealOneCard());
                     this.sums[this.numberPlayerTurn] = this.calculateHandSums(this.hands[`player${this.numberPlayerTurn+1}`]);
-                    console.log(`player ${this.numberPlayerTurn+1} just hit. the card they got: `, this.hands[`player${this.numberPlayerTurn+1}`][this.hands[`player${this.numberPlayerTurn+1}`].length-1]);
+                    console.log(`--> player ${this.numberPlayerTurn+1} just hit. the card they got: `, this.hands[`player${this.numberPlayerTurn+1}`][this.hands[`player${this.numberPlayerTurn+1}`].length-1]);
                 } else if (resp === 'S') {
-                    console.log(`player ${this.numberPlayerTurn+1} chose to stay.`);
+                    console.log(`--> player ${this.numberPlayerTurn+1} chose to stay.`);
                 }
                 
                 if (this.numberPlayerTurn < this.numberOfPlayers && resp === 'H') {
@@ -63,7 +72,6 @@ class BlackJack {
                             console.log('\n');
                             this.dealerMoves();
                         }
-                        
                     // They are choosing hit again and their number is less than 21
                     } else if (this.sums[this.numberPlayerTurn] < 21) {
                         this.recursionRun();
@@ -84,19 +92,7 @@ class BlackJack {
                         console.log('\n');
                         this.dealerMoves();
                     }
-                } //else {
-                //     if (this.numberPlayerTurn !== this.numberOfPlayers-1) {
-                //         this.numberPlayerTurn++;
-                //         this.recursionRun();
-                //     } else {
-                //         rl.close();
-                //         console.log('Hands: ', this.hands);
-                //         console.log('Everyone\'s sums: ',this.sums);
-                //         console.log('\n');
-                //         this.dealerMoves();
-                //     }
-                    
-                // }
+                } 
 
             })
         } else {
@@ -114,14 +110,15 @@ class BlackJack {
     }
 
     dealerMoves() {
-        if (this.sums[this.sums.length-1] === 21) {
-            console.log('game over, blackjack');
-            return;
-        } 
-        console.log('Dealer\'s turn.');
         let dealerIndex = this.sums.length-1;
 
-        while (this.sums[dealerIndex] < 17 && this.sums[dealerIndex] <22) {
+        if (this.sums[dealerIndex] >= 17 && this.sums[dealerIndex] < 22) {
+            console.log('Dealer has a hand of at least 17.');
+            console.log('GAME OVER. winners: ',this.determineWinner(false));
+        }
+
+        while (this.sums[dealerIndex] < 17 && this.sums[dealerIndex] < 22) {
+            console.log('Dealer\'s turn.');
             let card = this.deck.dealOneCard();
             this.hands['dealer'].push(card);
             this.sums[dealerIndex] = this.calculateHandSums(this.hands['dealer']);
@@ -132,15 +129,14 @@ class BlackJack {
             console.log('\n');
             if (this.sums[dealerIndex] >= 17) {
                 console.log('game over!');
+                console.log('WINNERS:', this.determineWinner(false))
             }
             if (this.sums[dealerIndex] > 21) {
                 console.log('dealer busted! Everyone wins!');
+                console.log('WINNERS:', this.determineWinner(true))
             }
         }
 
-        // console.log('Hands: ', this.hands);
-        // console.log('Everyone\s sums: ', this.sums);
-        // console.log('\n');
         
         
     }
@@ -170,6 +166,54 @@ class BlackJack {
         }
 
         return sum;
+    }
+
+    /* 
+        All game outcomes: 
+            1. Only dealer wins 
+            2. Either player wins
+            3. Both players win 
+            4. Dealer and a player win 
+            5. Dealer and both players win 
+    */
+    determineWinner(dealerBust) {
+        let winners = [{
+            playerIndex: 0,
+            score: this.sums[0]
+        }];
+        
+        // dealer busts, everyone wins
+        if (dealerBust) {
+            for (let i=1; i< this.sums.length-1; i++) {
+                winners.push({
+                    playerIndex: i,
+                    score: this.sums[i]
+                })
+            }
+            return winners;
+        }
+
+
+        for (let i=1; i<this.sums.length; i++) {
+            if (this.sums[i] > winners[0].score && this.sums[i] < 22 || this.sums[0] > 21 && this.sums[i] < 22) {
+                winners = [{
+                    playerIndex: null,
+                    score: null
+                }];
+                winners[0].playerIndex = i;
+                winners[0].score = this.sums[i];
+            }
+            
+            if (this.sums[i] === winners[0].score && winners[0].playerIndex !== i) {
+                winners.push({
+                    playerIndex: i,
+                    score: this.sums[i]
+                })
+            }
+            
+        }
+
+        return winners;
     }
 }
 
