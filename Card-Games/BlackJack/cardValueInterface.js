@@ -7,6 +7,7 @@ const cardValues = {
     '7': 7,
     '8': 8,
     '9': 9,
+    '10': 10,
     'Jack': 10,
     'Queen': 10,
     'King': 10,
