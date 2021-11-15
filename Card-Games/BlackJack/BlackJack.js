@@ -17,48 +17,28 @@ class BlackJack {
         this.running = true;
         this.playAgain = true; 
 
-        this.run();
+        //this.run();
+        this.recursionRun();
     }
 
-    async run() {
-        let count = 0;
-        let hands;
-        while (this.playAgain) {
-            this.deck = new DeckOfCards();
-            hands = this.deck.dealDeckPartial(2, 2, true);
-            console.log(hands);
-            this.running = true;
+    recursionRun() {
+        this.deck = new DeckOfCards();
+        let hands = this.deck.dealDeckPartial(2, 2, true);
+        console.log('Hands: ', hands);
+        this.printPlayerData(this.numberPlayerTurn, hands[`player${this.numberPlayerTurn+1}`], hands['dealer']);
 
-            while (this.running) {
-                this.printPlayerData(this.numberPlayerTurn, hands[`player${this.numberPlayerTurn+1}`], hands['dealer']);
-
-                await this.requestUserInput(hands);
-                this.running = false;
-
-                
-            }
-
-            count++;
-            if (count === 2) {
-                this.playAgain = false;
-            }
-        }
-
-        console.log('END: ', hands);
-
-    }
-
-    requestUserInput(hands) {
-        rl.question("type H to hit, S to stay, Sp to split. Your input:  ", resp => {
+        rl.question("type H to hit, S to stay, Sp to split. Your input:  ", async resp => {
             if (resp === 'H') {
+                console.log(`player ${this.numberPlayerTurn} just hit. `);
                 hands[`player${this.numberPlayerTurn+1}`].push(this.deck.dealOneCard());
             } else if (resp === 'S') {
                 this.numberPlayerTurn++;
             }
-
+            console.log('this is the response: ', resp);
+            console.log('new decks:', hands);
             
-
             rl.close();
+
         })
     }
 
