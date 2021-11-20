@@ -46,6 +46,11 @@ class DeckOfCards {
 
     // deals the cards into x number of piles evenly
     dealWholeDeck(piles) {
+        if (this.deck.length % piles !== 0) {
+            console.log("please pick a number of players that is divisible by the number of cards");
+            return []
+        }
+
         let subDecks = this.createEmptySubDecks(piles); 
         
         let subDeckIndex = 0;
@@ -61,11 +66,6 @@ class DeckOfCards {
     }
 
     createEmptySubDecks(piles, dealer) {
-        if (this.deck.length % piles !== 0) {
-            console.log("please pick a number of players that is divisible by the number of cards");
-            return []
-        }
-
         let subDecks = {};
         for (let i=0; i<piles; i++) {
             subDecks[`player${i+1}`] = [];
@@ -80,11 +80,6 @@ class DeckOfCards {
 
     // deals the deck so each person has x number of cards
     dealDeckPartial(piles, numCards, dealer) {
-        if (piles * numCards > 52) {
-            console.log('cannot deal the deck to the specified number of piles and cards per pile. Please try again.');
-            return;
-        }
-
         let subDecks = this.createEmptySubDecks(piles, dealer); 
         let additionalHand;
         if (dealer) additionalHand = 1;
