@@ -1,7 +1,5 @@
 const DeckOfCards = require("../deckOfCards.js");
-const cardValues = require('./cardValueInterface.js');
 const readline = require('readline');
-
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,11 +13,29 @@ const legalPlayerInputValues = {
     'S': 1
 };
 
+const cardValues = {
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    '10': 10,
+    'Jack': 10,
+    'Queen': 10,
+    'King': 10,
+    'Ace': {
+        High: 11,
+        Low: 1
+    }
+}
+
 /* 
     Things to add: 
-        1. Ace should be 11 until it makes the score over 21.
-        2. Does not currently support when a player and the dealer both win, only says dealer wins.
-        3. convert "player 2" to dealer
+        1. rename numberPlayerTurn to indicate that it is the player index, not player number. 
+        2. 
 */
 
 
@@ -189,9 +205,10 @@ class BlackJack {
     }
 
     printPlayerData(player, hand, dealerHand) {
-        console.log(`===== Player ${player+1} is up! =====`);
-        console.log(`TOTAL: ${this.sums[player]} || ${hand}`);
-        console.log(`DEALER: ${this.sums[this.sums.length-1]} || ${dealerHand}`);
+        console.log(`========== Player ${player+1} is up! ==========`);
+        console.log('YOU:    ', this.sums[player], '||', hand)
+        // console.log(`DEALER: ${parseInt(this.sums[this.sums.length-1])} || ${dealerHand}`);
+        console.log('DEALER: ', this.sums[this.sums.length-1], '||', dealerHand);
         console.log('\n');
     }
 
