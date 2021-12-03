@@ -45,7 +45,7 @@
     function start() {
         generateDropdown('metric', 'US');
         outputUnitEl.innerHTML = outputUnits;
-        console.log(outputUnits);
+        // console.log(outputUnits);
     }
     start();
 
@@ -145,7 +145,9 @@
     }
 
     // create map of all operands for calculations MINUS THE PARENS
-    const arithmeticRelatedChars = ['.','+', '-', '/', '*'];
+    // const arithmeticRelatedChars = ['.','+', '-', '/', '*'];
+    const arithmeticRelatedChars = ['+', '-', '/', '*'];
+
     const operandsMap = new Map(); 
     for (let i=0; i<arithmeticRelatedChars.length; i++) {
         operandsMap.set(arithmeticRelatedChars[i], '');
@@ -155,10 +157,11 @@
     for (let i=0; i<arithmeticRelatedChars.length; i++) {
         legalValues.set(arithmeticRelatedChars[i], '');
     }
+    legalValues.set('.','.');
     legalValues.set('',''); // make sure to include empty string as a legal value
     legalValues.set('(',''); // add the parentheses to legal values
     legalValues.set(')','');
-    console.log(legalValues);
+    // console.log(legalValues);
 
 
     // grab the input value from the user and calculate. Need to handle decimals/letters
@@ -181,7 +184,6 @@
     function assessUserInput(input) {
         let parenthesesStack = [];
         let operandsStack = [];
-        console.log(input);
 
         // check for balanced parentheses && legal operand usage
         for (let i=0; i<input.length; i++) {
@@ -227,6 +229,7 @@
     }
 
     /* 
+     (55+12)/2
         workingNumbers = [
                             [55, 12, 5],
                             [23, 24]
@@ -242,9 +245,9 @@
     // operands array has all of the operations done in order
     // Both arrays will be used to calculate the arithmetic result. CURRENTLY DOES NOT SUPPORT PEMDAS IN ONE PARANTHETICAL LAYER: ie (5+4/3) will be incorrect
     function arithmeticResult(input) {
-        console.log('input array: ',input);
+        // console.log('input array: ',input);
         let result;
-        let workingNumbers = [[''],['']];
+        let workingNumbers = [[''], ['']];
         let runningWorkingNumber = '';
         let operands = [];
         let workingNumbersRow = 0;
@@ -295,12 +298,34 @@
 
         // calculates the arithmetic result using the tool arrays
         let operandIndex = 0;
-        let runningResult = 0;
-        for (let i=0; i<workingNumbers.length; i++) {
-            for (let j=0; j<workingNumbers[i].length; j++) {
-                
+        let numbersRowIndex = 0;
+        let numbersColIndex = 1;
+        let runningResult = parseFloat(workingNumbers[0][0]);
+        console.log('RUNNING RESULT: ', runningResult);
+        
+        while (operandIndex < operands.length && numbersRowIndex < workingNumbers.length && numbersColIndex < workingNumbers[numbersRowIndex].length) {
+            if (operands[operandIndex] === '+') {
+                console.log('operation was: +')
+                runningResult += parseFloat(workingNumbers[numbersRowIndex][numbersColIndex]);
+            } else if (operands[operandIndex] === '-') {
+                console.log('operation was: -')
+                runningResult -= parseFloat(workingNumbers[numbersRowIndex][numbersColIndex]);
+            } else if (operands[operandIndex] === '*') {
+                console.log('operation was: *')
+                runningResult *= parseFloat(workingNumbers[numbersRowIndex][numbersColIndex]);
+            } else if (operands[operandIndex] === '/') {
+                console.log('operation was: /')
+                runningResult /= parseFloat(workingNumbers[numbersRowIndex][numbersColIndex]);
             }
+            operandIndex++;
+            numbersColIndex++; 
+            if (numbersColIndex >= workingNumbers[numbersRowIndex].length) {
+                numbersRowIndex++;
+                numbersColIndex = 0;
+            }
+            console.log('RUNNING RESULT: ', runningResult);
         }
+        return runningResult;
     }
 
 
@@ -310,10 +335,10 @@
         console.log('user input validation check response: ',userInputResult);
 
         if (userInputResult?.status) { // NEED TO ADD THE QUESTION MARK OR ELSE IT DOESN'T WORK. Since userInputResult is not predefined, it doesn't know if it has a property named status or if it's even an object
-            arithmeticResult(userInputResult?.inputArray);
+            let valueToConvert = arithmeticResult(userInputResult?.inputArray);
             
-            const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
-            console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
+            //const valueToConvert = Number(inputValue); // needs to be something else to grab decimals
+            // console.log(valueToConvert, conversionType, inputStandard, inputUnits, outputStandard, outputUnits); // FINALLY WORKING
 
             // convert everything to a baseline standard (ft or m) then calculate the output
             const conversionConstantstoStandardMeasurement = {
@@ -384,7 +409,7 @@
             } else {
                 outputEl.innerHTML = '_.___';
             }
-            console.log(outputValue);
+            // console.log(outputValue);
 
             // ex: 10cm to ft , inputStandard: metric, input units: cm, output units: ft
             // 10cm/100cmPerMeter m * 3.28 ft/meter 

@@ -35,7 +35,8 @@ const cardValues = {
 /* 
     Things to add: 
         1. rename numberPlayerTurn to indicate that it is the player index, not player number. 
-        2. 
+        2. winners: does not support when there are two winners who got a higher score than the dealer but they did not bust and are not the same. ex: player 1 got 20, player 4 got 19, dealer got 17. 
+           currently the app only says player 1 is the winner and not player 4 as well. 
 */
 
 
