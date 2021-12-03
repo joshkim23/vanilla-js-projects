@@ -9,4 +9,5 @@ Utility Apps:
 
 (In Work) Games: 
 1. Black Jack
-2. A Deck of cards class
+2. War
+3. A Deck of cards class
