@@ -33,5 +33,9 @@ function addListItem(inputText) {
     input.value = ''; //input.value NOT input.html or input.innertext
 }
 
+function sortByCompleted() {
+    
+}
+
 
 

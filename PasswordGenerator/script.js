@@ -24,7 +24,7 @@ const checkBoxes = [{
 
 
 // create event listener for the generate button, makes an array of the checked types to be used later
-generateButton.addEventListener('click', () => {
+generateButton.addEventListener('click', (event) => {
     let numChecked = [0, 0, 0, 0]; //correspond to upper, lower, nums, symbols
     let sum = 0;
     for (let i = 0; i<checkBoxes.length; i++) {
